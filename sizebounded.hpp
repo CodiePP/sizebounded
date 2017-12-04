@@ -2,6 +2,8 @@
 
 #include <cstddef>
 #include <exception>
+#include <string>
+#include <vector>
 
 
 #if __cpp_exceptions
@@ -17,7 +19,8 @@ class sizeboundediter {
   public:
     sizeboundediter(const sizebounded<T,sz> *under, int pos)
       : _pos(pos), _under(under)
-    {}
+    {
+    }
 
     bool operator!=(const sizeboundediter<T,sz> & other) {
       return _pos != other._pos;
@@ -39,6 +42,11 @@ template <typename T, int sz>
 class sizebounded {
   public:
   sizebounded();
+  ~sizebounded();
+
+  sizebounded(sizebounded const &);
+  sizebounded& operator=(sizebounded const &);
+
   T& operator[](std::size_t i);
   const T& operator[](std::size_t i) const;
 
@@ -50,7 +58,10 @@ class sizebounded {
   sizeboundediter<T,sz> end() const {
         return sizeboundediter<T,sz>(this, sz);
   }
-  
+
+  std::string toString() const;
+  std::vector<T> toVector() const;
+
 #if __cpp_exceptions
 #else
   bool isValid(const T& t) const { return &t != &_dummy; }

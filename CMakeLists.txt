@@ -4,6 +4,8 @@ project(BoundedSize)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -Wall")
 
+add_definitions( -DDEBUG )
+
 # boost
 #set(BOOST_ROOT "/opt/boost_1_61_0")
 add_definitions( -DBOOST_ALL_DYN_LINK )

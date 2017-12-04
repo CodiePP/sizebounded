@@ -21,8 +21,81 @@ using namespace boost::posix_time;
 
 BOOST_AUTO_TEST_SUITE( BoundedSizeUT )
 
+BOOST_AUTO_TEST_CASE( Deep_Copy )
+{
+    setenv("PRINT_DEBUG", "yes", 1);
+    constexpr int n = 1000;
+    sizebounded<unsigned char,n> buf;
+    buf[0]='a';
+    buf[n-1]='z';
+    {
+      auto buf2 = buf;
+      BOOST_CHECK_EQUAL(buf2[0], 'a');
+      BOOST_CHECK_EQUAL(buf2[n-1], 'z');
+    }
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf[n-1], 'z');
+    std::clog << "all done." << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( String_Copy )
+{
+    setenv("PRINT_DEBUG", "yes", 1);
+    constexpr int n = 20;
+    sizebounded<unsigned char,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'+i; }
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf[n-1], 't');
+    std::clog << "string copy: " << buf.toString() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( Vector_Copy )
+{
+    setenv("PRINT_DEBUG", "yes", 1);
+    constexpr int n = 20;
+    sizebounded<unsigned char,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'+i; }
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf[n-1], 't');
+    auto v = buf.toVector();
+    BOOST_CHECK_EQUAL(v.size(), n);
+    std::clog << "vector copy: " << typeid(v).name() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( String_Copy_of_Int_Buffer )
+{
+    setenv("PRINT_DEBUG", "yes", 1);
+    constexpr int n = 20;
+    sizebounded<int,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'+i; }
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf[n-1], 't');
+    std::string str = buf.toString();
+    BOOST_CHECK_EQUAL(str.size(), n);
+    std::clog << "string copy: " << str << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( Vector_Copy_of_Int_Buffer )
+{
+    setenv("PRINT_DEBUG", "yes", 1);
+    constexpr int n = 20;
+    sizebounded<int,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'+i; }
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf[n-1], 't');
+    auto v = buf.toVector();
+    BOOST_CHECK_EQUAL(v.size(), n);
+    std::clog << "vector copy: " << typeid(v).name() << std::endl;
+}
+
 BOOST_AUTO_TEST_CASE( Timing_Basic )
 {
+    unsetenv("PRINT_DEBUG");
+    std::clog << "Timing non-checked access:  ";
     constexpr int n = 100000;
     constexpr int r = 1000;
     ptime t0(microsec_clock::universal_time());
@@ -41,6 +114,8 @@ BOOST_AUTO_TEST_CASE( Timing_Basic )
 
 BOOST_AUTO_TEST_CASE( Timing_Bounded )
 {
+    unsetenv("PRINT_DEBUG");
+    std::clog << "Timing size-checked access: ";
     constexpr int n = 100000;
     constexpr int r = 1000;
     ptime t0(microsec_clock::universal_time());
