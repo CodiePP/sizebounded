@@ -132,6 +132,44 @@ BOOST_AUTO_TEST_CASE( Timing_Bounded )
     std::clog << "total time: " <<  double( (t1 - t0).total_microseconds() ) / 1000.0 << " ms" << std::endl;
 }
 
+BOOST_AUTO_TEST_CASE( map_function_over_buffer )
+{
+    constexpr int n = 20;
+    sizebounded<char,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'; }
+    auto buf2 = buf;
+    // the underlying data structure is const
+    buf.map([&buf2](int i, char c) {
+        buf2[i] = c + 1;
+      });
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf2[0], 'b');
+    std::clog << "buf =  " << buf.toString() << std::endl;
+    std::clog << "buf2 = " << buf2.toString() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( transform_buffer_functionally )
+{
+    constexpr int n = 20;
+    sizebounded<char,n> buf;
+    for (int i=0; i<n; i++) {
+      buf[i]='a'+i; }
+    auto buf2 = buf;
+    // in-place transformation of elements
+    buf2.transform([](int i, char c)->char {
+        if (i % 2 == 0) {
+          return c + 1;
+        } else {
+          return c;
+        }
+      });
+    BOOST_CHECK_EQUAL(buf[0], 'a');
+    BOOST_CHECK_EQUAL(buf2[0], 'b');
+    std::clog << "buf =  " << buf.toString() << std::endl;
+    std::clog << "buf2 = " << buf2.toString() << std::endl;
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

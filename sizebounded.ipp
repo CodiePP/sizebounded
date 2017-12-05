@@ -100,3 +100,19 @@ std::vector<T> sizebounded<T,sz>::toVector() const
   return v;
 }
 
+template <typename T, int sz>
+void sizebounded<T,sz>::map(std::function<void(const int, const T)> f) const
+{
+    for (int i=0; i < sz; i++) {
+        f(i, _buffer[i]);
+    }
+}
+
+template <typename T, int sz>
+void sizebounded<T,sz>::transform(std::function<T(const int, const T)> f)
+{
+    for (int i=0; i < sz; i++) {
+        _buffer[i] = f(i, _buffer[i]);
+    }
+}
+

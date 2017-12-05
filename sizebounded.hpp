@@ -4,6 +4,7 @@
 #include <exception>
 #include <string>
 #include <vector>
+#include <functional>
 
 
 #if __cpp_exceptions
@@ -61,6 +62,9 @@ class sizebounded {
 
   std::string toString() const;
   std::vector<T> toVector() const;
+
+  void map(std::function<void(const int, const T)>) const;
+  void transform(std::function<T(const int, const T)>);
 
 #if __cpp_exceptions
 #else
