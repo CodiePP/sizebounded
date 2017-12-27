@@ -1,5 +1,6 @@
 
 #include "sizebounded.hpp"
+#include <cstring>
 
 template <typename T, int sz>
 T sizeboundediter<T,sz>::operator* () const
@@ -53,6 +54,7 @@ sizebounded<T,sz>& sizebounded<T,sz>::operator=(sizebounded<T,sz> const & sb2)
   if (getenv("PRINT_DEBUG") != NULL) {
     std::clog << "operator=(sizebounded const &)" << std::endl; }
 #endif
+  return *this;
 }
 
 template <typename T, int sz>

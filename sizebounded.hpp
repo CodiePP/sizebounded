@@ -66,6 +66,8 @@ class sizebounded {
   void map(std::function<void(const int, const T)>) const;
   void transform(std::function<T(const int, const T)>);
 
+  const T* ptr() const { return _buffer; }
+
 #if __cpp_exceptions
 #else
   bool isValid(const T& t) const { return &t != &_dummy; }
