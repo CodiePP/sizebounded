@@ -60,6 +60,8 @@ class sizebounded {
         return sizeboundediter<T,sz>(this, sz);
   }
 
+  int size() const { return sz; }
+
   std::string toString() const;
   std::vector<T> toVector() const;
 
