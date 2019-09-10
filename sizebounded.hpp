@@ -60,11 +60,15 @@ class sizebounded {
         return sizeboundediter<T,sz>(this, sz);
   }
 
+  int size() const { return sz; }
+
   std::string toString() const;
   std::vector<T> toVector() const;
 
   void map(std::function<void(const int, const T)>) const;
   void transform(std::function<T(const int, const T)>);
+
+  const T* ptr() const { return _buffer; }
 
 #if __cpp_exceptions
 #else

@@ -1,5 +1,6 @@
 
 #include "sizebounded.hpp"
+#include <cstring>
 
 template <typename T, int sz>
 T sizeboundediter<T,sz>::operator* () const
