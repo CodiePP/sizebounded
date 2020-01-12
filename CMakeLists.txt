@@ -21,6 +21,8 @@ INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
 
 file(GLOB SRCS *.cpp)
 
+include_directories (${PROJECT_SOURCE_DIR}/..)
+
 add_executable ( ${PROJECT_NAME}
     ${SRCS}
 )

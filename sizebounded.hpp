@@ -12,10 +12,10 @@ class sizebounded_read_exception : public std::exception {};
 class sizebounded_write_exception : public std::exception {};
 #endif
 
-template <typename T, int sz>
+template <typename T, std::size_t sz>
 class sizebounded;
 
-template <typename T, int sz>
+template <typename T, std::size_t sz>
 class sizeboundediter {
   public:
     sizeboundediter(const sizebounded<T,sz> *under, int pos)
@@ -27,7 +27,9 @@ class sizeboundediter {
       return _pos != other._pos;
     }
 
-    T operator*() const;
+    const T& operator*() const {
+      return _under->get(_pos);
+    }
 
     const sizeboundediter<T,sz>& operator++() {
       ++_pos;
@@ -39,7 +41,7 @@ class sizeboundediter {
     const sizebounded<T, sz> * _under;
 };
 
-template <typename T, int sz>
+template <typename T, std::size_t sz>
 class sizebounded {
   public:
   sizebounded();
@@ -51,7 +53,7 @@ class sizebounded {
   T& operator[](std::size_t i);
   const T& operator[](std::size_t i) const;
 
-  T get(int) const;
+  const T& get(std::size_t i) const;
   sizeboundediter<T,sz> begin() const {
         return sizeboundediter<T,sz>(this, 0);
   }
@@ -60,7 +62,7 @@ class sizebounded {
         return sizeboundediter<T,sz>(this, sz);
   }
 
-  int size() const { return sz; }
+  std::size_t size() const { return sz; }
 
   std::string toString() const;
   std::vector<T> toVector() const;
@@ -81,4 +83,7 @@ class sizebounded {
     T *_dummy { nullptr };
 #endif
 };
+
+template <typename T1, typename T2, std::size_t sz1, std::size_t sz2>
+bool memcopy(sizebounded<T2,sz2> &target, const sizebounded<T1,sz1> &source, std::size_t nsrc);
 
