@@ -106,6 +106,14 @@ void sizebounded<T,sz>::map(std::function<void(const int, const T)> f) const
 }
 
 template <typename T, std::size_t sz>
+void sizebounded<T,sz>::zip(std::function<void(const T, const T)> f, sizebounded<T,sz> const & other) const
+{
+    for (int i=0; i < sz; i++) {
+        f(_buffer[i], other._buffer[i]);
+    }
+}
+
+template <typename T, std::size_t sz>
 void sizebounded<T,sz>::transform(std::function<T(const int, const T)> f)
 {
     for (int i=0; i < sz; i++) {

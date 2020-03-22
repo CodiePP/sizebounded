@@ -68,6 +68,7 @@ class sizebounded {
   std::vector<T> toVector() const;
 
   void map(std::function<void(const int, const T)>) const;
+  void zip(std::function<void(const T, const T)>, sizebounded<T,sz> const &) const;
   void transform(std::function<T(const int, const T)>);
 
   const T* ptr() const { return _buffer; }
@@ -86,4 +87,3 @@ class sizebounded {
 
 template <typename T1, typename T2, std::size_t sz1, std::size_t sz2>
 bool memcopy(sizebounded<T2,sz2> &target, const sizebounded<T1,sz1> &source, std::size_t nsrc);
-
