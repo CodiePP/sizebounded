@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 #include <functional>
-
+#ifdef DEBUG
+#include <iostream>
+#endif
 
 #if __cpp_exceptions
 class sizebounded_read_exception : public std::exception {};
