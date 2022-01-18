@@ -80,7 +80,7 @@ class sizebounded {
   bool isValid(const T& t) const { return &t != &_dummy; }
 #endif
   private:
-    T *_buffer;
+    T *_buffer { nullptr };
 #if __cpp_exceptions
 #else
     T *_dummy { nullptr };

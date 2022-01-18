@@ -31,6 +31,7 @@ sizebounded<T,sz>::~sizebounded()
 template <typename T, std::size_t sz>
 sizebounded<T,sz>::sizebounded(sizebounded<T,sz> const & sb2)
 {
+  if (_buffer) { delete[] _buffer; }
   _buffer = new T[sz];
   memcopy(*this, sb2, sz);
 #ifdef DEBUG
@@ -42,6 +43,7 @@ sizebounded<T,sz>::sizebounded(sizebounded<T,sz> const & sb2)
 template <typename T, std::size_t sz>
 sizebounded<T,sz>& sizebounded<T,sz>::operator=(sizebounded<T,sz> const & sb2)
 {
+  if (_buffer) { delete[] _buffer; }
   _buffer = new T[sz];
   memcopy(*this, sb2, sz);
 #ifdef DEBUG
@@ -100,7 +102,7 @@ std::vector<T> sizebounded<T,sz>::toVector() const
 template <typename T, std::size_t sz>
 void sizebounded<T,sz>::map(std::function<void(const int, const T)> f) const
 {
-    for (int i=0; i < sz; i++) {
+    for (std::size_t i=0; i < sz; i++) {
         f(i, _buffer[i]);
     }
 }
@@ -108,7 +110,7 @@ void sizebounded<T,sz>::map(std::function<void(const int, const T)> f) const
 template <typename T, std::size_t sz>
 void sizebounded<T,sz>::zip(std::function<void(const T, const T)> f, sizebounded<T,sz> const & other) const
 {
-    for (int i=0; i < sz; i++) {
+    for (std::size_t i=0; i < sz; i++) {
         f(_buffer[i], other._buffer[i]);
     }
 }
@@ -116,7 +118,7 @@ void sizebounded<T,sz>::zip(std::function<void(const T, const T)> f, sizebounded
 template <typename T, std::size_t sz>
 void sizebounded<T,sz>::transform(std::function<T(const int, const T)> f)
 {
-    for (int i=0; i < sz; i++) {
+    for (std::size_t i=0; i < sz; i++) {
         _buffer[i] = f(i, _buffer[i]);
     }
 }
@@ -136,7 +138,7 @@ bool memcopy(sizebounded<T2,sz2> &target, const sizebounded<T1,sz1> &source, std
   if (getenv("PRINT_DEBUG") != NULL) {
     std::clog << "copied " << minbytes << " bytes" << std::endl;
     std::clog << "b2=" << b2 << " minbytes / b2=" << (minbytes / b2) << " minbytes % b2=" << (minbytes % b2) << std::endl;
-    for (int i=0; i<minbytes; i++) {
+    for (std::size_t i=0; i<minbytes; i++) {
       std::clog << "s    " << i << " " << int(*(((char*)source.ptr())+i)) << std::endl;
       std::clog << "t    " << i << " " << int(*(((char*)target.ptr())+i)) << std::endl;
     }
