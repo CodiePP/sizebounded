@@ -44,6 +44,7 @@ BOOST_AUTO_TEST_CASE( Deep_Copy_sizeof4 )
     constexpr int n = 10;
     sizebounded<int,n> buf;
     buf.transform([](int i, int v)->int {
+      v=0;
       return int('A'+i); });
     {
       auto buf2 = buf;
@@ -115,6 +116,7 @@ BOOST_AUTO_TEST_CASE( Timing_Basic )
     std::clog << "Timing non-checked access:  ";
     constexpr int n = 100000;
     constexpr int r = 1000;
+    int _t;
     ptime t0(microsec_clock::universal_time());
     for (int i = 0; i < r; i++) {
       unsigned char buf[n];
@@ -122,7 +124,7 @@ BOOST_AUTO_TEST_CASE( Timing_Basic )
         buf[j] = j % 7;
       }
       for (auto c : buf) {
-        c * 1;
+        _t = (int)c;
       }
     }
     ptime t1(microsec_clock::universal_time());
@@ -135,6 +137,7 @@ BOOST_AUTO_TEST_CASE( Timing_Bounded )
     std::clog << "Timing size-checked access: ";
     constexpr int n = 100000;
     constexpr int r = 1000;
+    int _t;
     ptime t0(microsec_clock::universal_time());
     for (int i = 0; i < r; i++) {
       sizebounded<unsigned char, n> buf;
@@ -142,7 +145,7 @@ BOOST_AUTO_TEST_CASE( Timing_Bounded )
         buf[j] = j % 7;
       }
       for (auto c : buf) {
-        c * 1;
+        _t = (int)c;
       }
     }
     ptime t1(microsec_clock::universal_time());
